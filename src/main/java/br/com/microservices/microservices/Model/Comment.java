@@ -3,6 +3,8 @@ package br.com.microservices.microservices.Model;
 
 import java.util.UUID;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +25,8 @@ public class Comment {
 
     @ManyToOne()
     @JoinColumn(name = "comment_id", nullable = false)
-    User userComent;
+    Users userComent;
+    
 
     public UUID getId() {
         return id;
@@ -32,7 +35,7 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(String contentComment, User userComent) {
+    public Comment(String contentComment, Users userComent) {
         this.contentComment = contentComment;
         this.userComent = userComent;
     }
@@ -45,12 +48,12 @@ public class Comment {
         this.contentComment = contentComment;
     }
 
-    public User getuserComent(User user) {
+    public Users getuserComent(Users user) {
         return userComent;
     }
 
-    public void setuserComent(User userComent) {
-        this.userComent = userComent;
+    public void setuserComent(Users user) {
+        this.userComent = user ;
     }
 
 

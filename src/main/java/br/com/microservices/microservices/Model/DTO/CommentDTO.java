@@ -5,7 +5,7 @@ import java.util.UUID;
 public record CommentDTO(
         UUID commentID,
         String contentComment,
-        UUID userIDComent
+        String username
 
 ) {
 

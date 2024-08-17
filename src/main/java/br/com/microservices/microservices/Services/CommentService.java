@@ -1,5 +1,7 @@
 package br.com.microservices.microservices.Services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import br.com.microservices.microservices.Model.Comment;
@@ -20,9 +22,14 @@ public class CommentService {
 
     public Comment newComment(CommentDTO commentDTO) {
         Comment comment = new Comment();
-        comment.setuserComent(userRepository.findById(commentDTO.userIDComent()).get());
+        comment.setuserComent(userRepository.findByUsername(commentDTO.username()).get());
         comment.setContentComment(commentDTO.contentComment());
         return commentRepository.save(comment);
+    }
+
+    public List<Comment> listComments() {
+        List<Comment> lista = commentRepository.findAll();
+        return lista;
     }
 
 }

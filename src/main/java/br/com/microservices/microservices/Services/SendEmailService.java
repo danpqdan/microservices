@@ -5,7 +5,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import br.com.microservices.microservices.Model.User;
+import br.com.microservices.microservices.Model.Users;
 import br.com.microservices.microservices.Model.DTO.EmailDTO;
 import br.com.microservices.microservices.Repository.UserRepository;
 
@@ -40,15 +40,16 @@ public class SendEmailService {
         }
     }
 
-    public void sendEmailNewUser(User user) {
-        User user1 = userRepository.findById(user.getId()).get();
+    public void sendEmailNewUser(Users user) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(remetende);
-            message.setTo(user1.getEmail());
-            message.setSubject("Seja bem vindo: " + user1.getUsername());
-            message.setText("Seu email de acesso: " + user1.getEmail() + "\n Sua senha é: " + user1.getPassword()
+            message.setTo(user.getEmail());
+            message.setSubject("Seja bem vindo: " + user.getUsername());
+            message.setText("Seu email de acesso: " + user.getEmail() + "\n Sua senha é: " + user.getPassword()
                     + "\n Agora poderá realizar comentarios apartir do seu nome de usuario. ");
+            message.setText("Acesse o link para validar sua conta: http://localhost:8080/auth/" + user.getId() + "/"
+                    + user.getUsername());
             emailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();

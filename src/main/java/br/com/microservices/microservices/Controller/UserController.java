@@ -11,36 +11,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.microservices.microservices.Model.Comment;
-import br.com.microservices.microservices.Model.User;
+import br.com.microservices.microservices.Model.Users;
 import br.com.microservices.microservices.Model.DTO.CommentDTO;
 import br.com.microservices.microservices.Model.DTO.UserDTO;
+import br.com.microservices.microservices.Repository.UserRepository;
 import br.com.microservices.microservices.Services.CommentService;
 import br.com.microservices.microservices.Services.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("users")
 public class UserController {
 
     private final UserService userService;
     private final CommentService commentService;
 
-    public UserController(UserService userService, CommentService commentService) {
+    public UserController(UserService userService, CommentService commentService,
+            UserRepository userRepository) {
         this.commentService = commentService;
         this.userService = userService;
     }
 
     @PostMapping
-    public ResponseEntity<User> saveUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Users> saveUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(userDTO));
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<Comment> comments(@RequestBody CommentDTO commentDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.newComment(commentDTO));
+    public ResponseEntity<Comment> comments(@RequestBody CommentDTO commentDTO) {
+        commentService.newComment(commentDTO);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/comments")
+    public ResponseEntity<List<Comment>> comments() {
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.listComments());
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.listUsers());
+    public ResponseEntity<List<Users>> getUsers() {
+        return ResponseEntity.ok().body(userService.listUsers());
+    }
+
+    @GetMapping("/one")
+    public ResponseEntity<Users> getOne(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok().body(userService.findOne(userDTO));
     }
 }

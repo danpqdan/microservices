@@ -1,16 +1,12 @@
 package br.com.microservices.microservices.Model;
 
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import br.com.microservices.microservices.Model.Enuns.AuthorityEnum;
+import br.com.microservices.microservices.Model.DTO.LoginResponseDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,35 +17,24 @@ import jakarta.persistence.Table;
 
 @Table(name = "tb_users")
 @Entity
-public class User implements UserDetails {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
     String username;
     String password;
     String email;
-    AuthorityEnum authorization;
 
     @OneToMany(mappedBy = "userComent", cascade = CascadeType.ALL)
     Set<Comment> comment = new HashSet<>();
 
-    public User(String username, String password, String email, AuthorityEnum authorization) {
+    public Users(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.authorization = authorization;
     }
 
-    public User() {
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.authorization == AuthorityEnum.USERAUTHORIZED)
-            return List.of(new SimpleGrantedAuthority("USERAUTHORIZED"),
-                    new SimpleGrantedAuthority("USERNOTAUTHORIZED"));
-        else
-            return List.of(new SimpleGrantedAuthority("USERNOTAUTHORIZED"));
+    public Users() {
     }
 
     public UUID getId() {
@@ -90,26 +75,6 @@ public class User implements UserDetails {
 
     public void setComment(Set<Comment> comment) {
         this.comment = comment;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 
 }
