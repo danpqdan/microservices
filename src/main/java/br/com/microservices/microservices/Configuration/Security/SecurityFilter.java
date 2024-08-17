@@ -1,14 +1,17 @@
 package br.com.microservices.microservices.Configuration.Security;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import br.com.microservices.microservices.Model.Users;
 import br.com.microservices.microservices.Repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,12 +28,14 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        var token = this.recoverToken(request);
-        if (token != null) {
-            var userName = tokenService.validateToken(token);
-            UserDetails user = userRepository.findByUsername(userName);
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        var token = this.recoverToken(request);
+        var login = tokenService.validateToken(token);
+
+        if (login != null) {
+            Users user = userRepository.findByUsername(login).orElseThrow(() -> new RuntimeException("User not found"));
+            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+            var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
