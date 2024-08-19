@@ -1,5 +1,6 @@
 package br.com.microservices.microservices.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,6 +15,6 @@ import br.com.microservices.microservices.Model.Users;
 public interface UserRepository extends JpaRepository<Users, UUID> {
     
     Optional<Users> findByUsername(String nome);
-    Users findByEmail(String username);
+    List<Users> findByEmail(String email);
 
 }

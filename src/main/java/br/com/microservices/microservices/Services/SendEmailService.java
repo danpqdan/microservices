@@ -48,8 +48,8 @@ public class SendEmailService {
             message.setSubject("Seja bem vindo: " + user.getUsername());
             message.setText("Seu email de acesso: " + user.getEmail() + "\n Sua senha é: " + user.getPassword()
                     + "\n Agora poderá realizar comentarios apartir do seu nome de usuario. ");
-            message.setText("Acesse o link para validar sua conta: http://localhost:8080/auth/" + user.getId() + "/"
-                    + user.getUsername());
+            message.setText("Acesse o link para validar sua conta: http://localhost:8080/auth/" + user.getUsername() + "/"
+                    + user.getId());
             emailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();

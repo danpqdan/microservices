@@ -30,6 +30,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "auth/singin").permitAll()
                         .requestMatchers(HttpMethod.POST, "auth/singup").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/home").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/{username}/{id}").permitAll()
                         .requestMatchers( "swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);

@@ -4,9 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import br.com.microservices.microservices.Model.DTO.LoginResponseDTO;
+import br.com.microservices.microservices.Model.DTO.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,14 +22,24 @@ public class Users {
     String username;
     String password;
     String email;
+    Role authenticated;
 
     @OneToMany(mappedBy = "userComent", cascade = CascadeType.ALL)
     Set<Comment> comment = new HashSet<>();
 
-    public Users(String username, String password, String email) {
+    public Users(String username, String password, String email, Role authenticated) {
+        this.authenticated = authenticated;
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public Role getAuthenticated() {
+        return authenticated;
+    }
+
+    public void setAuthenticated(Role authenticated) {
+        this.authenticated = authenticated;
     }
 
     public Users() {

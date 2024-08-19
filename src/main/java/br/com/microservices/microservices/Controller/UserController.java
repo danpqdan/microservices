@@ -56,4 +56,5 @@ public class UserController {
     public ResponseEntity<Users> getOne(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok().body(userService.findOne(userDTO));
     }
+
 }

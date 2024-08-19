@@ -6,8 +6,7 @@ public record UserDTO(
     String username,
     String password,
     String email,
-    UUID userComment,
-    String contentComment
+    UUID userComment
 ) {
 
 }
